@@ -1,0 +1,98 @@
+"""
+Plots for every config of every experiment
+"""
+
+# We describe for each figure, what are the needed inputs
+# * The general rule is that the name of the script is also
+#   the name of the output pdf
+# * The base directory is "../scripts/figures"
+#   Another path can be given
+# * The general rule is that the input data will always
+#   come from the (PROCESSED / "{exp}/{config}") directory
+
+fig_paper_script_path = "../scripts/figures/paper/"
+plots_config_figs = {
+    'bathymetry':{
+        'input':["xnemogcm.nemo.nc"]
+    },
+    'bathymetry_section':{
+        'input':["xnemogcm.nemo.nc"]
+    },
+    'forcings':{
+        'input':["xnemogcm.nemo.nc", "forcing_fields.nc"]
+    },
+    'forcings_rhostar':{
+        'input':["xnemogcm.nemo.nc", "forcing_fields.nc"]
+    },
+    'bathy_forcing':{
+        'input':["xnemogcm.nemo.nc", "forcing_fields.nc"]
+    },
+    'baro':{
+        'input':["xnemogcm.nemo.nc", "barotropic_circulation.nc"]
+    },
+    'baro_ekman':{
+        'input':["xnemogcm.nemo.nc", "barotropic_circulation.nc", "ekman_velocity.nc"]
+    },
+    'sst_sss_sigma0':{
+        'input':["xnemogcm.nemo.nc", "thermodynamics.nc", "forcing_fields.nc"]
+    },
+    'sci_sections':{
+        'input':["section.nc"]
+    },
+    'fb_tot':{
+        'input':["xnemogcm.nemo.nc", "buoyancy_fluxes.nc"]
+    },
+    'moc':{
+        'input':["xnemogcm.nemo.nc", "moc.nc", "thermodynamics.nc"]
+    },
+    'moc_sigma':{
+        'input':["xnemogcm.nemo.nc", "moc.nc", "thermodynamics.nc"]
+    },
+}
+
+config_paper_all_figs = list(plots_config_figs.keys()) + ['mld_sci_ssh', 'surface']
+
+rule plot_config_paper:
+    input:
+        lambda wildcards: [(PROCESSED / f"{{exp}}/{{config}}/{file}") for file in plots_config_figs[wildcards.fig]['input']]
+    output:
+        (FIGURES / "{exp}/{config}/{fig}.pdf")
+    script:
+        "../scripts/figures/paper/{wildcards.fig}.py"
+
+
+rule plot_mld_sci_ssh:
+    input:
+        data=[(PROCESSED / "{exp}/{config}/xnemogcm.nemo.nc"),
+        (PROCESSED / "{exp}/{config}/sci.nc")],
+        params=[SECTION_PARAM_LON]
+    params:
+        lon_sections=lon_sections
+    output:
+        (FIGURES / "{exp}/{config}/mld_sci_ssh.pdf")
+    script:
+        "../scripts/figures/paper/mld_sci_ssh.py"
+        
+rule plot_surface:
+    input:
+        data=[(PROCESSED / "{exp}/{config}/xnemogcm.nemo.nc"),
+        (PROCESSED / "{exp}/{config}/thermodynamics.nc"),
+        (PROCESSED / "{exp}/{config}/forcing_fields.nc"),
+        (PROCESSED / "{exp}/{config}/sci.nc")],
+        params=[SECTION_PARAM_LON]
+    params:
+        lon_sections=lon_sections
+    output:
+        (FIGURES / "{exp}/{config}/surface.pdf")
+    script:
+        "../scripts/figures/paper/surface.py"
+
+
+rule plot_fb_year_variation:
+    input:
+        (PROCESSED / "{exp}/{config}/xnemogcm.nemo.nc"),
+        (PROCESSED / "{exp}/{config}/buoyancy_fluxes.nc")
+    output:
+        (FIGURES / "{exp}/{config}/fb_year_variation.pdf")
+    script:
+        "../scripts/figures/fb_year_variation.py"

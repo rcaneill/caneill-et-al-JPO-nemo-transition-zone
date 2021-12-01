@@ -1,0 +1,73 @@
+"""
+Contains the rules for the paper,
+i.e. creating the figures, and compiling the latex sources
+"""
+
+exp_ref = 'EXP_main'
+exp_conf_ref = 'EXP_main/EXP_rn_lambda1_0.06_rn_a0_0.165'
+
+# We describe for each figure, from what exp/conf we should get it
+figs = {
+    'variation_alpha.pdf':exp_ref, 
+    #'bathymetry_section.pdf':exp_conf_ref,
+    #'forcings_rhostar.pdf':exp_conf_ref,
+    'bathy_forcing.pdf':exp_conf_ref,
+    'baro_ekman.pdf':exp_conf_ref,
+    'sst_sss_sigma0.pdf':exp_conf_ref,
+    'mld_sci_ssh.pdf':exp_conf_ref,
+    #'surface.pdf':exp_conf_ref,
+    'sci_sections.pdf':exp_conf_ref,
+    'fb_tot.pdf':exp_conf_ref,
+    'moc_sigma.pdf':exp_conf_ref,
+    'fb_comp.pdf':exp_ref,
+    #'lat_buoyancy_front_phi_max.pdf':exp_ref,
+    #'ts_properties.pdf':exp_ref,
+    #'lat_buoyancy_front_vs_tec.pdf':exp_ref,
+    'properties_vs_lat.pdf':exp_ref,
+}
+
+# We need to replace the underscores for the AMS paper submission
+rule paper_all_fig:
+    input:
+        expand(os.path.join(FIGURES_PAPER, '{fig}'), fig=[i.replace('_','-') for i in figs.keys()]),
+        (FIGURES / "paper" / "sketch.pdf")
+
+rule paper_get_fig:
+    input:
+        lambda wildcards: os.path.join(FIGURES, figs[wildcards.fig.replace('-','_')], wildcards.fig.replace('-','_'))
+    output:
+        os.path.join(FIGURES_PAPER, '{fig}')
+    shell:
+        "cp {input} {output}"
+        
+
+rule paper_phi_max:
+    input:
+        lambda wildcards: expand((PROCESSED / f"{exp_ref}/{{config}}/xnemogcm.nemo.nc"), config=exp_configs_dict[exp_ref]),
+        lambda wildcards: expand((PROCESSED / f"{exp_ref}/{{config}}/forcing_fields.nc"), config=exp_configs_dict[exp_ref])
+    output:
+        (PROCESSED / f"{exp_ref}/phi_max.csv")
+    script:
+        '../scripts/paper_phi_max.py'
+
+
+rule paper_global_sketch_draft:
+    input:
+        [(PROCESSED / exp_conf_ref / "xnemogcm.nemo.nc"),
+         (PROCESSED / exp_conf_ref / "buoyancy_fluxes.nc"),
+         (PROCESSED / exp_conf_ref / "sci.nc"),
+         (PROCESSED / exp_conf_ref / "moc.nc"),
+         (PROCESSED / exp_conf_ref / "forcing_fields.nc"),
+         (PROCESSED / exp_conf_ref / "thermodynamics.nc")]
+    output:
+        (FIGURES / "draft" / "sketch.pdf")
+    script:
+        "../scripts/figures/paper/global_sketch_draft.py"
+
+
+
+rule paper_global_sketch:
+    output:
+        (FIGURES / "paper" / "sketch.pdf")
+    script:
+        "../scripts/figures/paper/global_sketch.py"

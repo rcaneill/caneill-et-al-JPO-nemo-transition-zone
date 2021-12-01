@@ -1,0 +1,26 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+xarray = "==0.19.0"
+netcdf4 = "*"
+dask = {extras = ["array"],version = "*"}
+cmocean = "*"
+matplotlib = "*"
+xgcm = "*"
+f90nml = "*"
+snakemake = "*"
+nc-time-axis = "*"
+numba = "*"
+xnemogcm = "0.3.4"
+xbasin = "0.0.5"
+seaborn = "*"
+cf-xarray = "*"
+lib-position-transition-zone = {editable = true, path = "."}
+
+[requires]
+python_version = "3.8"

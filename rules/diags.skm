@@ -1,0 +1,115 @@
+rule diag_thermodynamics:
+    input:
+        (PROCESSED / "{exp}/{config}/xnemogcm.nemo.nc")
+    output:
+        (PROCESSED / "{exp}/{config}/thermodynamics.nc")
+    script:
+        "../scripts/diags/thermodynamics.py"
+
+rule diag_buoyancy_fluxes:
+    input:
+        (PROCESSED / "{exp}/{config}/xnemogcm.nemo.nc"),
+        (PROCESSED / "{exp}/{config}/thermodynamics.nc")
+    output:
+        (PROCESSED / "{exp}/{config}/buoyancy_fluxes.nc")
+    script:
+        "../scripts/diags/buoyancy_fluxes.py"
+
+rule diag_moc:
+    input:
+        (PROCESSED / "{exp}/{config}/xnemogcm.nemo.nc"),
+        (PROCESSED / "{exp}/{config}/thermodynamics.nc")
+    output:
+        (PROCESSED / "{exp}/{config}/moc.nc")
+    script:
+        "../scripts/diags/moc.py"
+
+rule diag_sci:
+    input:
+        (PROCESSED / "{exp}/{config}/xnemogcm.nemo.nc"),
+        (PROCESSED / "{exp}/{config}/thermodynamics.nc"),
+        (PROCESSED / "{exp}/{config}/delta_t.nc")
+    output:
+        (PROCESSED / "{exp}/{config}/sci.nc")
+    script:
+        "../scripts/diags/sci.py"
+
+rule diag_section:
+    input:
+        data = [(PROCESSED / "{exp}/{config}/xnemogcm.nemo.nc"),
+                (PROCESSED / "{exp}/{config}/sci.nc"),
+                (PROCESSED / "{exp}/{config}/delta_t.nc")],
+        params = [SECTION_PARAM_LON, SECTION_PARAM_TIME]
+    params:
+        lon_sections=lon_sections,
+        month_sections=month_sections
+    output:
+        (PROCESSED / "{exp}/{config}/section.nc")
+    script:
+        "../scripts/diags/section.py"
+
+rule diag_front_position:
+    input:
+        (PROCESSED / "{exp}/{config}/xnemogcm.nemo.nc"),
+        (PROCESSED / "{exp}/{config}/sci.nc"),
+        (PROCESSED / "{exp}/{config}/buoyancy_fluxes.nc")
+    output:
+        (PROCESSED / "{exp}/{config}/front_position.nc")
+    script:
+        "../scripts/diags/front_position.py"
+
+        
+rule diag_average_properties:
+    input:
+        (PROCESSED / "{exp}/{config}/xnemogcm.nemo.nc"),
+        (PROCESSED / "{exp}/{config}/thermodynamics.nc")
+    output:
+        (PROCESSED / "{exp}/{config}/average_properties.nc")
+    script:
+        "../scripts/diags/average_properties.py"
+
+        
+rule diag_barotropic_circulation:
+    input:
+        (PROCESSED / "{exp}/{config}/xnemogcm.nemo.nc")
+    output:
+        (PROCESSED / "{exp}/{config}/barotropic_circulation.nc")
+    script:
+        "../scripts/diags/barotropic_circulation.py"
+
+        
+rule diag_forcing_fields:
+    input:
+        (PROCESSED / "{exp}/{config}/xnemogcm.nemo.nc")
+    output:
+        (PROCESSED / "{exp}/{config}/forcing_fields.nc")
+    script:
+        "../scripts/diags/forcing_fields.py"
+
+        
+rule diag_ekman_velocity:
+    input:
+        (PROCESSED / "{exp}/{config}/xnemogcm.nemo.nc")
+    output:
+        (PROCESSED / "{exp}/{config}/ekman_velocity.nc")
+    script:
+        "../scripts/diags/ekman_velocity.py"
+
+        
+rule diag_potential_vorticity:
+    input:
+        (PROCESSED / "{exp}/{config}/xnemogcm.nemo.nc"),
+        (PROCESSED / "{exp}/{config}/thermodynamics.nc")
+    output:
+        (PROCESSED / "{exp}/{config}/potential_vorticity.nc")
+    script:
+        "../scripts/diags/potential_vorticity.py"
+
+rule diag_alpha_function_of_T:
+    input:
+        (PROCESSED / "{exp}/{config}/xnemogcm.nemo.nc")
+    output:
+        (PROCESSED / "{exp}/{config}/alpha_function_of_T.nc")
+    script:
+        "../scripts/diags/alpha_function_of_T.py"
+

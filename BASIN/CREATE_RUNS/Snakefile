@@ -1,0 +1,42 @@
+from pathlib import Path
+
+configfile: "config.yaml"
+
+# Constants
+EXPERIMENTS_PARAMS = Path('../EXPERIMENTS_PARAMS')
+
+
+rule create_exp:
+    output:
+        '../EXP_{expname, [^/\s]+}/experiments.csv',
+        directory('../EXP_{expname, [^/\s]+}/EXP00')
+    params:
+        ref=Path('EXP_REF').absolute(),
+        nemo=Path('../EXP00/nemo').absolute(),
+        exp='../EXP_{expname}'
+    shell:
+        "./create_exp.sh {output[0]} {params.ref} {params.exp} {params.nemo} {output[1]}"
+
+rule create_exp_config:
+    input:
+        expcsv='../{expname, [^/\s]+}/experiments.csv',
+        cfg=Path(EXPERIMENTS_PARAMS / '{expname}.csv').absolute()
+    params:
+        exp='../{expname}',
+    output:
+        directory('../{expname}/Experiments')
+    script:
+        "create_exp_config.py"
+
+rule launch_run:
+    input:
+        '../{expname, [^/\s]+}/Experiments'
+    output:
+        touch('../{expname}/launch_run.done')
+    shell:
+        "./launch_run.sh {input}"
+
+ALL_EXP = [i.parts[-1][:-4] for i in Path(EXPERIMENTS_PARAMS).glob('*.csv')]
+rule launch_all:
+    input:
+        expand('../{expname}/launch_run.done', expname=ALL_EXP)
