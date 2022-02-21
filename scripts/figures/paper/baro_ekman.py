@@ -35,7 +35,7 @@ if __name__ == '__main__':
         Y = 34.8
         axe.plot(xlim, [Y, Y], "k--")
         axe.set_xlim(xlim)
-        axe.text(-4.2e-6, 50, "Uppwelling", size="small")
+        axe.text(-4.2e-6, 50, "Upwelling", size="small")
         axe.text(-4.2e-6, 20, "Downwelling", size="small")
         axe.set_title("a) Ekman vertical velocity")
         axe.set_ylabel(r"$\varphi$ [$^\circ$N]")
