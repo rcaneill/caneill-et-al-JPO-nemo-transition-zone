@@ -9,6 +9,7 @@ exp_paper_all_figs = [
     "ts_moc_properties",
     "lat_buoyancy_front_vs_tec",
     "fb_comp",
+    "mld_comp",
     "lat_buoyancy_front_phi_max",
     "properties_vs_lat"
 ]
@@ -103,6 +104,18 @@ rule plot_fb_comp:
         (FIGURES / "{exp}/fb_comp.pdf")
     script:
         "../scripts/figures/paper/fb_comp.py"
+
+rule plot_mld_comp:
+    input:
+        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"), config=exp_configs_dict[wildcards.exp]),
+        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/forcing_fields.nc"), config=exp_configs_dict[wildcards.exp]),
+        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/sci.nc"), config=exp_configs_dict[wildcards.exp]),
+        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/average_properties.nc"), config=exp_configs_dict[wildcards.exp]),
+        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/exp_short_name.nc"), config=exp_configs_dict[wildcards.exp])
+    output:
+        (FIGURES / "{exp}/mld_comp.pdf")
+    script:
+        "../scripts/figures/paper/mld_comp.py"
 
 rule plot_lat_buoyancy_front_phi_max:
     input:
