@@ -105,6 +105,12 @@ To generate all the figures at once (about 5 minutes to run for one experiment):
 pipenv run snakemake --cores 8 figures/plot_all.done
 ```
 
+You can also generate the figures giving the figure number
+from the paper, e.g.:
+```
+pipenv run snakemake --cores 8 figures/paper_by_number/figure_1.pdf
+```
+
 The rules are described in the files located in rules/, and each rule uses a python script located in scripts/.
 The names are self-describing.
 
