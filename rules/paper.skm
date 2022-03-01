@@ -8,23 +8,67 @@ exp_conf_ref = 'EXP_main/EXP_rn_lambda1_0.06_rn_a0_0.165'
 
 # We describe for each figure, from what exp/conf we should get it
 figs = {
-    'variation_alpha.pdf':exp_ref, 
-    #'bathymetry_section.pdf':exp_conf_ref,
-    #'forcings_rhostar.pdf':exp_conf_ref,
+    'variation_alpha.pdf':exp_ref,
     'bathy_forcing.pdf':exp_conf_ref,
     'baro_ekman.pdf':exp_conf_ref,
     'sst_sss_sigma0.pdf':exp_conf_ref,
     'mld_sci_ssh.pdf':exp_conf_ref,
-    #'surface.pdf':exp_conf_ref,
     'sci_sections.pdf':exp_conf_ref,
     'fb_tot.pdf':exp_conf_ref,
     'moc_sigma.pdf':exp_conf_ref,
     'fb_comp.pdf':exp_ref,
-    #'lat_buoyancy_front_phi_max.pdf':exp_ref,
-    #'ts_properties.pdf':exp_ref,
-    #'lat_buoyancy_front_vs_tec.pdf':exp_ref,
     'properties_vs_lat.pdf':exp_ref,
+    'sketch.pdf': 'paper'
 }
+
+# We link each figure to its number in the paper
+figs_number = {
+    1: 'bathy_forcing.pdf',
+    2: 'baro_ekman.pdf',
+    3: 'moc_sigma.pdf',
+    4: 'sst_sss_sigma0.pdf',
+    5: 'mld_sci_ssh.pdf',
+    6: 'sci_sections.pdf',
+    7: 'fb_tot.pdf',
+    8: 'fb_comp.pdf',
+    9: 'variation_alpha.pdf',
+    10: 'properties_vs_lat.pdf',
+    11: 'sketch.pdf',
+}
+
+
+rule paper_all_dag_fig:
+    input:
+        expand(os.path.join(str(FIGURES_PAPER) + '_DAG', 'dag_fig_{n}.svg'), n=range(1,12))
+
+rule paper_dag_fig:
+    output:
+        os.path.join(str(FIGURES_PAPER) + '_DAG', 'dag_fig_{n}.svg')
+    shell:
+        "snakemake --dag figures/paper_by_number/figure_{wildcards.n}.pdf  | dot -Tsvg > {output}"
+
+rule paper_all_rulegraph_fig:
+    input:
+        expand(os.path.join(str(FIGURES_PAPER) + '_RULEGRAPH', 'rulegraph_fig_{n}.svg'), n=range(1,12))
+        
+rule paper_rulegraph_fig:
+    output:
+        os.path.join(str(FIGURES_PAPER) + '_RULEGRAPH', 'rulegraph_fig_{n}.svg')
+    shell:
+        "snakemake --rulegraph figures/paper_by_number/figure_{wildcards.n}.pdf  | dot -Tsvg > {output}"
+
+
+rule paper_all_fig_from_number:
+    input:
+        expand(os.path.join(str(FIGURES_PAPER) + '_by_number', 'figure_{n}.pdf'), n=range(1,12))
+
+rule paper_fig_from_number:
+    output:
+        os.path.join(str(FIGURES_PAPER) + '_by_number', 'figure_{n}.pdf')
+    input:
+        lambda wildcards: os.path.join(FIGURES, figs[figs_number[int(wildcards.n)]], figs_number[int(wildcards.n)])
+    shell:
+        "cp {input} {output}"
 
 # We need to replace the underscores for the AMS paper submission
 rule paper_all_fig:
