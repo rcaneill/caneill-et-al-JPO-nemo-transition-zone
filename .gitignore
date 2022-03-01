@@ -1,0 +1,10 @@
+data/*
+figures/*
+*~
+\#*\#
+*.egg-info
+dask-worker-space
+pyproject.toml
+.snakemake
+!figures/paper_DAG
+!figures/paper_RULEGRAPH
