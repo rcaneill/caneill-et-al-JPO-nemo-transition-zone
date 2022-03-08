@@ -1,25 +1,30 @@
 rule all_process:
     input:
-        expand(os.path.join(PROCESSED, "{exp_config}/xnemogcm.nemo.nc"), exp_config=exp_configs)
+        expand(
+            os.path.join(PROCESSED, "{exp_config}/xnemogcm.nemo.nc"),
+            exp_config=exp_configs,
+        ),
+
 
 rule process_with_xnemogcm:
     input:
         os.path.join(RAW, "{exp}/Experiments/{config}"),
-        delta_t_file=os.path.join(PROCESSED, "{exp}/{config}/delta_t.nc")
+        delta_t_file=os.path.join(PROCESSED, "{exp}/{config}/delta_t.nc"),
     output:
-        os.path.join(PROCESSED, "{exp}/{config}/xnemogcm.nemo.nc")
+        os.path.join(PROCESSED, "{exp}/{config}/xnemogcm.nemo.nc"),
     params:
-        expname='{config}'
+        expname="{config}",
     script:
         "../scripts/process/open_with_xnemogcm.py"
 
+
 rule process_delta_t:
     input:
-        os.path.join(RAW, "{exp}/Experiments/{config}")
+        os.path.join(RAW, "{exp}/Experiments/{config}"),
     params:
-        expname='{config}'
+        expname="{config}",
     output:
-        os.path.join(PROCESSED, "{exp}/{config}/delta_t.nc")
+        os.path.join(PROCESSED, "{exp}/{config}/delta_t.nc"),
     script:
         "../scripts/process/get_delta_t.py"
 
@@ -29,8 +34,8 @@ rule process_delta_t:
 rule process_exp_short_name:
     input:
         expnames=os.path.join(RAW, "{exp}/experiments.csv"),
-        xnemo=os.path.join(PROCESSED, "{exp}/{config}/xnemogcm.nemo.nc")
+        xnemo=os.path.join(PROCESSED, "{exp}/{config}/xnemogcm.nemo.nc"),
     output:
-        os.path.join(PROCESSED, "{exp}/{config}/exp_short_name.nc")
+        os.path.join(PROCESSED, "{exp}/{config}/exp_short_name.nc"),
     script:
         "../scripts/process/exp_short_name.py"

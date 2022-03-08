@@ -12,128 +12,247 @@ exp_paper_all_figs = [
     "fb_comp",
     "mld_comp",
     "lat_buoyancy_front_phi_max",
-    "properties_vs_lat"
+    "properties_vs_lat",
 ]
 
-exp_supplementary_all_figs = [
-    "rho_max_vs_rho_star_max"
-]
+exp_supplementary_all_figs = ["rho_max_vs_rho_star_max"]
+
 
 rule plot_properties_vs_lat:
     input:
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/front_position.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/average_properties.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/forcing_fields.nc"), config=exp_configs_dict[wildcards.exp])
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/front_position.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/average_properties.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/forcing_fields.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
     output:
-        (FIGURES / "{exp}/properties_vs_lat.pdf")
+        (FIGURES / "{exp}/properties_vs_lat.pdf"),
     script:
         "../scripts/figures/paper/properties_vs_lat.py"
 
+
 rule plot_rho_max_vs_rho_star_max:
     input:
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/forcing_fields.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/thermodynamics.nc"), config=exp_configs_dict[wildcards.exp])
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/forcing_fields.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/thermodynamics.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
     output:
-        (FIGURES / "{exp}/rho_max_vs_rho_star_max.pdf")
+        (FIGURES / "{exp}/rho_max_vs_rho_star_max.pdf"),
     script:
         "../scripts/figures/rho_max_vs_rho_star_max.py"
 
+
 rule plot_lat_buoyancy_front:
     input:
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/front_position.nc"), config=exp_configs_dict[wildcards.exp])
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/front_position.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
     output:
-        (FIGURES / "{exp}/lat_buoyancy_front.pdf")
+        (FIGURES / "{exp}/lat_buoyancy_front.pdf"),
     script:
         "../scripts/figures/paper/lat_buoyancy_front.py"
-	
+
+
 rule plot_variation_alpha:
     input:
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/alpha_function_of_T.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/exp_short_name.nc"), config=exp_configs_dict[wildcards.exp])
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/alpha_function_of_T.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/exp_short_name.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
     output:
-        (FIGURES / "{exp}/variation_alpha.pdf")
+        (FIGURES / "{exp}/variation_alpha.pdf"),
     script:
         "../scripts/figures/paper/variation_alpha.py"
 
+
 rule plot_variation_alpha_a0_Cb:
     input:
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/alpha_function_of_T.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/exp_short_name.nc"), config=exp_configs_dict[wildcards.exp])
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/alpha_function_of_T.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/exp_short_name.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
     output:
-        (FIGURES / "{exp}/variation_alpha_a0_Cb.pdf")
+        (FIGURES / "{exp}/variation_alpha_a0_Cb.pdf"),
     script:
         "../scripts/figures/paper/variation_alpha_a0_Cb.py"
 
-       
+
 rule plot_ts_properties:
     input:
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/front_position.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/average_properties.nc"), config=exp_configs_dict[wildcards.exp])
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/front_position.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/average_properties.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
     output:
-        (FIGURES / "{exp}/ts_properties.pdf")
+        (FIGURES / "{exp}/ts_properties.pdf"),
     script:
         "../scripts/figures/paper/ts_properties.py"
 
-       
+
 rule plot_ts_moc_properties:
     input:
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/front_position.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/average_properties.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/moc.nc"), config=exp_configs_dict[wildcards.exp])
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/front_position.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/average_properties.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/moc.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
     output:
-        (FIGURES / "{exp}/ts_moc_properties.pdf")
+        (FIGURES / "{exp}/ts_moc_properties.pdf"),
     script:
         "../scripts/figures/paper/ts_moc_properties.py"
 
-       
+
 rule plot_lat_buoyancy_front_vs_tec:
     input:
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/front_position.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/average_properties.nc"), config=exp_configs_dict[wildcards.exp])
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/front_position.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/average_properties.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
     output:
-        (FIGURES / "{exp}/lat_buoyancy_front_vs_tec.pdf")
+        (FIGURES / "{exp}/lat_buoyancy_front_vs_tec.pdf"),
     script:
         "../scripts/figures/paper/lat_buoyancy_front_vs_tec.py"
 
 
 rule plot_fb_comp:
     input:
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/forcing_fields.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/sci.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/average_properties.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/buoyancy_fluxes.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/exp_short_name.nc"), config=exp_configs_dict[wildcards.exp])
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/forcing_fields.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/sci.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/average_properties.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/buoyancy_fluxes.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/exp_short_name.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
     output:
-        (FIGURES / "{exp}/fb_comp.pdf")
+        (FIGURES / "{exp}/fb_comp.pdf"),
     script:
         "../scripts/figures/paper/fb_comp.py"
 
+
 rule plot_mld_comp:
     input:
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/forcing_fields.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/sci.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/average_properties.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/exp_short_name.nc"), config=exp_configs_dict[wildcards.exp])
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/forcing_fields.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/sci.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/average_properties.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/exp_short_name.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
     output:
-        (FIGURES / "{exp}/mld_comp.pdf")
+        (FIGURES / "{exp}/mld_comp.pdf"),
     script:
         "../scripts/figures/paper/mld_comp.py"
 
+
 rule plot_lat_buoyancy_front_phi_max:
     input:
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/front_position.nc"), config=exp_configs_dict[wildcards.exp]),
-        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/forcing_fields.nc"), config=exp_configs_dict[wildcards.exp])
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/front_position.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / "{{exp}}/{config}/forcing_fields.nc"),
+            config=exp_configs_dict[wildcards.exp],
+        ),
     output:
-        (FIGURES / "{exp}/lat_buoyancy_front_phi_max.pdf")
+        (FIGURES / "{exp}/lat_buoyancy_front_phi_max.pdf"),
     script:
         "../scripts/figures/paper/lat_buoyancy_front_phi_max.py"

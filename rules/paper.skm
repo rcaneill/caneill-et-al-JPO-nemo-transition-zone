@@ -3,117 +3,148 @@ Contains the rules for the paper,
 i.e. creating the figures, and compiling the latex sources
 """
 
-exp_ref = 'EXP_main'
-exp_conf_ref = 'EXP_main/EXP_rn_lambda1_0.06_rn_a0_0.165'
+exp_ref = "EXP_main"
+exp_conf_ref = "EXP_main/EXP_rn_lambda1_0.06_rn_a0_0.165"
 
 # We describe for each figure, from what exp/conf we should get it
 figs = {
-    'variation_alpha_a0_Cb.pdf':exp_ref,
-    'bathy_forcing.pdf':exp_conf_ref,
-    'baro_ekman.pdf':exp_conf_ref,
-    'sst_sss_sigma0.pdf':exp_conf_ref,
-    'mld_sci_ssh.pdf':exp_conf_ref,
-    'sci_sections.pdf':exp_conf_ref,
-    'fb_tot.pdf':exp_conf_ref,
-    'moc_sigma.pdf':exp_conf_ref,
-    'fb_comp.pdf':exp_ref,
-    'properties_vs_lat.pdf':exp_ref,
-    'sketch.pdf': 'paper',
-    'mld_comp.pdf':exp_ref,
+    "variation_alpha_a0_Cb.pdf": exp_ref,
+    "bathy_forcing.pdf": exp_conf_ref,
+    "baro_ekman.pdf": exp_conf_ref,
+    "sst_sss_sigma0.pdf": exp_conf_ref,
+    "mld_sci_ssh.pdf": exp_conf_ref,
+    "sci_sections.pdf": exp_conf_ref,
+    "fb_tot.pdf": exp_conf_ref,
+    "moc_sigma.pdf": exp_conf_ref,
+    "fb_comp.pdf": exp_ref,
+    "properties_vs_lat.pdf": exp_ref,
+    "sketch.pdf": "paper",
+    "mld_comp.pdf": exp_ref,
 }
 
 # We link each figure to its number in the paper
 figs_number = {
-    1: 'variation_alpha_a0_Cb.pdf',
-    2: 'bathy_forcing.pdf',
-    3: 'baro_ekman.pdf',
-    4: 'moc_sigma.pdf',
-    5: 'sst_sss_sigma0.pdf',
-    6: 'mld_sci_ssh.pdf',
-    7: 'sci_sections.pdf',
-    8: 'fb_tot.pdf',
-    9: 'fb_comp.pdf',
-    10: 'properties_vs_lat.pdf',
-    11: 'sketch.pdf',
-    12: 'mld_comp.pdf',
+    1: "variation_alpha_a0_Cb.pdf",
+    2: "bathy_forcing.pdf",
+    3: "baro_ekman.pdf",
+    4: "moc_sigma.pdf",
+    5: "sst_sss_sigma0.pdf",
+    6: "mld_sci_ssh.pdf",
+    7: "sci_sections.pdf",
+    8: "fb_tot.pdf",
+    9: "fb_comp.pdf",
+    10: "properties_vs_lat.pdf",
+    11: "sketch.pdf",
+    12: "mld_comp.pdf",
 }
 
 
 rule paper_all_dag_fig:
     input:
-        expand(os.path.join(str(FIGURES_PAPER) + '_DAG', 'dag_fig_{n}.svg'), n=range(1,12))
+        expand(
+            os.path.join(str(FIGURES_PAPER) + "_DAG", "dag_fig_{n}.svg"),
+            n=range(1, 12),
+        ),
+
 
 rule paper_dag_fig:
     output:
-        os.path.join(str(FIGURES_PAPER) + '_DAG', 'dag_fig_{n}.svg')
+        os.path.join(str(FIGURES_PAPER) + "_DAG", "dag_fig_{n}.svg"),
     shell:
         "snakemake --dag figures/paper_by_number/figure_{wildcards.n}.pdf  | dot -Tsvg > {output}"
 
+
 rule paper_all_rulegraph_fig:
     input:
-        expand(os.path.join(str(FIGURES_PAPER) + '_RULEGRAPH', 'rulegraph_fig_{n}.svg'), n=range(1,12))
-        
+        expand(
+            os.path.join(str(FIGURES_PAPER) + "_RULEGRAPH", "rulegraph_fig_{n}.svg"),
+            n=range(1, 12),
+        ),
+
+
 rule paper_rulegraph_fig:
     output:
-        os.path.join(str(FIGURES_PAPER) + '_RULEGRAPH', 'rulegraph_fig_{n}.svg')
+        os.path.join(str(FIGURES_PAPER) + "_RULEGRAPH", "rulegraph_fig_{n}.svg"),
     shell:
         "snakemake --rulegraph figures/paper_by_number/figure_{wildcards.n}.pdf  | dot -Tsvg > {output}"
 
 
 rule paper_all_fig_from_number:
     input:
-        expand(os.path.join(str(FIGURES_PAPER) + '_by_number', 'figure_{n}.pdf'), n=range(1,12))
+        expand(
+            os.path.join(str(FIGURES_PAPER) + "_by_number", "figure_{n}.pdf"),
+            n=range(1, 12),
+        ),
+
 
 rule paper_fig_from_number:
     output:
-        os.path.join(str(FIGURES_PAPER) + '_by_number', 'figure_{n}.pdf')
+        os.path.join(str(FIGURES_PAPER) + "_by_number", "figure_{n}.pdf"),
     input:
-        lambda wildcards: os.path.join(FIGURES, figs[figs_number[int(wildcards.n)]], figs_number[int(wildcards.n)])
+        lambda wildcards: os.path.join(
+            FIGURES, figs[figs_number[int(wildcards.n)]], figs_number[int(wildcards.n)]
+        ),
     shell:
         "cp {input} {output}"
+
 
 # We need to replace the underscores for the AMS paper submission
 rule paper_all_fig:
     input:
-        expand(os.path.join(FIGURES_PAPER, '{fig}'), fig=[i.replace('_','-') for i in figs.keys()]),
-        (FIGURES / "paper" / "sketch.pdf")
+        expand(
+            os.path.join(FIGURES_PAPER, "{fig}"),
+            fig=[i.replace("_", "-") for i in figs.keys()],
+        ),
+        (FIGURES / "paper" / "sketch.pdf"),
+
 
 rule paper_get_fig:
     input:
-        lambda wildcards: os.path.join(FIGURES, figs[wildcards.fig.replace('-','_')], wildcards.fig.replace('-','_'))
+        lambda wildcards: os.path.join(
+            FIGURES,
+            figs[wildcards.fig.replace("-", "_")],
+            wildcards.fig.replace("-", "_"),
+        ),
     output:
-        os.path.join(FIGURES_PAPER, '{fig}')
+        os.path.join(FIGURES_PAPER, "{fig}"),
     shell:
         "cp {input} {output}"
-        
+
 
 rule paper_phi_max:
     input:
-        lambda wildcards: expand((PROCESSED / f"{exp_ref}/{{config}}/xnemogcm.nemo.nc"), config=exp_configs_dict[exp_ref]),
-        lambda wildcards: expand((PROCESSED / f"{exp_ref}/{{config}}/forcing_fields.nc"), config=exp_configs_dict[exp_ref])
+        lambda wildcards: expand(
+            (PROCESSED / f"{exp_ref}/{{config}}/xnemogcm.nemo.nc"),
+            config=exp_configs_dict[exp_ref],
+        ),
+        lambda wildcards: expand(
+            (PROCESSED / f"{exp_ref}/{{config}}/forcing_fields.nc"),
+            config=exp_configs_dict[exp_ref],
+        ),
     output:
-        (PROCESSED / f"{exp_ref}/phi_max.csv")
+        (PROCESSED / f"{exp_ref}/phi_max.csv"),
     script:
-        '../scripts/paper_phi_max.py'
+        "../scripts/paper_phi_max.py"
 
 
 rule paper_global_sketch_draft:
     input:
-        [(PROCESSED / exp_conf_ref / "xnemogcm.nemo.nc"),
-         (PROCESSED / exp_conf_ref / "buoyancy_fluxes.nc"),
-         (PROCESSED / exp_conf_ref / "sci.nc"),
-         (PROCESSED / exp_conf_ref / "moc.nc"),
-         (PROCESSED / exp_conf_ref / "forcing_fields.nc"),
-         (PROCESSED / exp_conf_ref / "thermodynamics.nc")]
+        [
+            (PROCESSED / exp_conf_ref / "xnemogcm.nemo.nc"),
+            (PROCESSED / exp_conf_ref / "buoyancy_fluxes.nc"),
+            (PROCESSED / exp_conf_ref / "sci.nc"),
+            (PROCESSED / exp_conf_ref / "moc.nc"),
+            (PROCESSED / exp_conf_ref / "forcing_fields.nc"),
+            (PROCESSED / exp_conf_ref / "thermodynamics.nc"),
+        ],
     output:
-        (FIGURES / "draft" / "sketch.pdf")
+        (FIGURES / "draft" / "sketch.pdf"),
     script:
         "../scripts/figures/paper/global_sketch_draft.py"
 
 
-
 rule paper_global_sketch:
     output:
-        (FIGURES / "paper" / "sketch.pdf")
+        (FIGURES / "paper" / "sketch.pdf"),
     script:
         "../scripts/figures/paper/global_sketch.py"
