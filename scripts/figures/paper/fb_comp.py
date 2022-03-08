@@ -9,6 +9,7 @@ The figure is made to look good for 5 experiences
 
 if __name__ == '__main__':
     ds = time_mean(xr.open_mfdataset(snakemake.input))
+    ds['F_b'] *= 1e8
     N = len(ds.exp)
     with sns.axes_style("ticks"):
         fig, ax = plt.subplots(
@@ -31,8 +32,8 @@ if __name__ == '__main__':
                 sub_ds.where(sub_ds.tmask_surf)
                 .F_b.cf.plot.contourf(
                     levels=11,
-                    vmax=1.5e-8,
-                    vmin=-1.5e-8,
+                    vmax=1.5,
+                    vmin=-1.5,
                     cmap=cmo.balance,
                     x="longitude",
                     y="latitude",
@@ -41,7 +42,7 @@ if __name__ == '__main__':
                 )
             )
             sub_ds.where(sub_ds.tmask_surf).F_b.cf.plot.contour(
-                levels=np.linspace(-9e-8, 9e-8, 13),
+                levels=np.linspace(-9, 9, 13),
                 colors="gray",
                 x="longitude",
                 y="latitude",
@@ -49,7 +50,7 @@ if __name__ == '__main__':
                 add_colorbar=False,
             )
             sub_ds.where(sub_ds.tmask_surf).F_b.cf.plot.contour(
-                levels=[-1, 0],
+                levels=[0],
                 colors="w",
                 x="longitude",
                 y="latitude",
@@ -100,6 +101,5 @@ if __name__ == '__main__':
         )
 
         cb = fig.colorbar(ims[0], cax=ax[-1])
-        cb.set_label(r"Buoyancy flux [m$^2\,$s$^{-3}$]")
-
+        cb.set_label(r"Buoyancy flux [$\times 10^{-8}\,$m$^2\,$s$^{-3}$]")
         fig.savefig(snakemake.output[0])

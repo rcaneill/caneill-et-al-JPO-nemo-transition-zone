@@ -8,7 +8,7 @@ exp_conf_ref = 'EXP_main/EXP_rn_lambda1_0.06_rn_a0_0.165'
 
 # We describe for each figure, from what exp/conf we should get it
 figs = {
-    'variation_alpha.pdf':exp_ref,
+    'variation_alpha_a0_Cb.pdf':exp_ref,
     'bathy_forcing.pdf':exp_conf_ref,
     'baro_ekman.pdf':exp_conf_ref,
     'sst_sss_sigma0.pdf':exp_conf_ref,
@@ -18,22 +18,24 @@ figs = {
     'moc_sigma.pdf':exp_conf_ref,
     'fb_comp.pdf':exp_ref,
     'properties_vs_lat.pdf':exp_ref,
-    'sketch.pdf': 'paper'
+    'sketch.pdf': 'paper',
+    'mld_comp.pdf':exp_ref,
 }
 
 # We link each figure to its number in the paper
 figs_number = {
-    1: 'bathy_forcing.pdf',
-    2: 'baro_ekman.pdf',
-    3: 'moc_sigma.pdf',
-    4: 'sst_sss_sigma0.pdf',
-    5: 'mld_sci_ssh.pdf',
-    6: 'sci_sections.pdf',
-    7: 'fb_tot.pdf',
-    8: 'fb_comp.pdf',
-    9: 'variation_alpha.pdf',
+    1: 'variation_alpha_a0_Cb.pdf',
+    2: 'bathy_forcing.pdf',
+    3: 'baro_ekman.pdf',
+    4: 'moc_sigma.pdf',
+    5: 'sst_sss_sigma0.pdf',
+    6: 'mld_sci_ssh.pdf',
+    7: 'sci_sections.pdf',
+    8: 'fb_tot.pdf',
+    9: 'fb_comp.pdf',
     10: 'properties_vs_lat.pdf',
     11: 'sketch.pdf',
+    12: 'mld_comp.pdf',
 }
 
 

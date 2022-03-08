@@ -5,6 +5,7 @@ Plots combining all configs from 1 experiment
 exp_paper_all_figs = [
     "lat_buoyancy_front",
     "variation_alpha",
+    "variation_alpha_a0_Cb",
     "ts_properties",
     "ts_moc_properties",
     "lat_buoyancy_front_vs_tec",
@@ -56,6 +57,16 @@ rule plot_variation_alpha:
         (FIGURES / "{exp}/variation_alpha.pdf")
     script:
         "../scripts/figures/paper/variation_alpha.py"
+
+rule plot_variation_alpha_a0_Cb:
+    input:
+        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/xnemogcm.nemo.nc"), config=exp_configs_dict[wildcards.exp]),
+        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/alpha_function_of_T.nc"), config=exp_configs_dict[wildcards.exp]),
+        lambda wildcards: expand((PROCESSED / "{{exp}}/{config}/exp_short_name.nc"), config=exp_configs_dict[wildcards.exp])
+    output:
+        (FIGURES / "{exp}/variation_alpha_a0_Cb.pdf")
+    script:
+        "../scripts/figures/paper/variation_alpha_a0_Cb.py"
 
        
 rule plot_ts_properties:

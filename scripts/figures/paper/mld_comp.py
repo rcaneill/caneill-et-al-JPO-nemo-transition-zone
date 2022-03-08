@@ -8,7 +8,7 @@ The figure is made to look good for 5 experiences
 
 
 if __name__ == '__main__':
-    ds = time_mean(xr.open_mfdataset(snakemake.input))
+    ds = time_mean(xr.open_mfdataset(snakemake.input), month=False).max('month')
     N = len(ds.exp)
     with sns.axes_style("ticks"):
         fig, ax = plt.subplots(
@@ -26,11 +26,15 @@ if __name__ == '__main__':
 
         for i in range(N):
             sub_ds = ds.isel(exp=i)
+            mld = sub_ds.where(sub_ds.tmask_surf).mldr10_1
+            # To render nice plots
+            mld.load()
+            mld[{'x_c':0}] = mld[{'x_c':1}]
+            mld[{'x_c':-1}] = mld[{'x_c':-2}]
             im = (
-                sub_ds.where(sub_ds.tmask_surf)
-                .mldr10_1.cf.plot.contourf(
-                    levels=21,
-                    vmax=1500,
+                mld.cf.plot.contourf(
+                    levels=19,
+                    vmax=3600,
                     vmin=0,
                     cmap=cmo.deep,
                     x="longitude",
