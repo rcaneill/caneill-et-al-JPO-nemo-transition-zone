@@ -3,19 +3,14 @@ from lib_position_transition_zone.figures.paper import *
 
 sns.axes_style("ticks")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ds = xr.open_mfdataset(snakemake.input)
 
-    ds.coords["lon_mercatoru"] = (
-        np.cos(np.deg2rad(ds.gphit)) * (ds.glamu - 20) + 20
-    )
-    ds.coords["lon_mercatort"] = (
-        np.cos(np.deg2rad(ds.gphit)) * (ds.glamt - 20) + 20
-    )
+    ds.coords["lon_mercatoru"] = np.cos(np.deg2rad(ds.gphit)) * (ds.glamu - 20) + 20
+    ds.coords["lon_mercatort"] = np.cos(np.deg2rad(ds.gphit)) * (ds.glamt - 20) + 20
 
     fig, ax = plt.subplots(
-        2, 1, figsize=(pc19, 4), sharex=True,
-        gridspec_kw={"height_ratios":[4, 1]}
+        2, 1, figsize=(pc19, 4), sharex=True, gridspec_kw={"height_ratios": [4, 1]}
     )
 
     bathy = ds.gdepw_0.isel({"z_f": -1}) / 1000
@@ -24,10 +19,17 @@ if __name__ == '__main__':
     hmin = ds.rn_hborder.values[0] / 1000
 
     p = bathy.cf.plot.contourf(
-        x="lon_mercatort", y="latitude", levels=11, cmap=cmo.deep_r, ax=ax[0],
-        vmin=hmin, vmax=hmax, extend='neither', add_colorbar=False,
+        x="lon_mercatort",
+        y="latitude",
+        levels=11,
+        cmap=cmo.deep_r,
+        ax=ax[0],
+        vmin=hmin,
+        vmax=hmax,
+        extend="neither",
+        add_colorbar=False,
     )
-    #p.colorbar.set_label("Depth [m]")
+    # p.colorbar.set_label("Depth [m]")
 
     # We only add the lines for the 1 degree case
     if ds.rn_e1_deg.values == 1.0:
@@ -48,29 +50,29 @@ if __name__ == '__main__':
 
     # We plot the section
     # plot of the length scale of the exponential
-    #ax[1].plot([0,ds.rn_distlam.values[0]], [hmin, hmax], color='gray')
-    #ax[1].plot([40,40-ds.rn_distlam.values[0]], [hmin, hmax], color='gray')
+    # ax[1].plot([0,ds.rn_distlam.values[0]], [hmin, hmax], color='gray')
+    # ax[1].plot([40,40-ds.rn_distlam.values[0]], [hmin, hmax], color='gray')
     # we change the y_c coordinate to gphit
-    bathy.swap_dims({'y_c':'gphit'}).interp(gphit=30).cf.plot.line(
+    bathy.swap_dims({"y_c": "gphit"}).interp(gphit=30).cf.plot.line(
         x="longitude", ax=ax[1], yincrease=False
     )
 
     ax[0].set_ylim(0, 60)
     ax[0].set_xlim(0, 40)
-    ax[1].set_ylim(hmax+0.02, hmin)
-    
+    ax[1].set_ylim(hmax + 0.02, hmin)
+
     for axe in ax:
         axe.set_xlabel("")
         axe.set_ylabel("")
     ax[1].set_xlabel(r"$\lambda$ [$^\circ$E]")
     ax[0].set_ylabel(r"$\varphi$ [$^\circ$N]")
-    ax[1].set_ylabel('Depth [km]')
+    ax[1].set_ylabel("Depth [km]")
 
-    ax[0].set_title('a) Bathymetry map')
-    ax[1].set_title('b) Section at $30^\circ$N')
+    ax[0].set_title("a) Bathymetry map")
+    ax[1].set_title("b) Section at $30^\circ$N")
 
     cb = fig.colorbar(p, ax=ax)
     cb.set_label("Depth [km]")
 
-    #fig.tight_layout()
+    # fig.tight_layout()
     fig.savefig(snakemake.output[0])

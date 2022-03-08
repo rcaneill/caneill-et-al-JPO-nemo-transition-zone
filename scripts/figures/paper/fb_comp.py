@@ -7,18 +7,26 @@ The figure is made to look good for 5 experiences
 """
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ds = time_mean(xr.open_mfdataset(snakemake.input))
-    ds['F_b'] *= 1e8
+    ds["F_b"] *= 1e8
     N = len(ds.exp)
     with sns.axes_style("ticks"):
         fig, ax = plt.subplots(
             1,
-            N+1,
-            figsize=(pc39*N/5, 3.5),
+            N + 1,
+            figsize=(pc39 * N / 5, 3.5),
             sharex=False,
             sharey=False,
-            gridspec_kw={"width_ratios": [1,]*N + [0.1,]},
+            gridspec_kw={
+                "width_ratios": [
+                    1,
+                ]
+                * N
+                + [
+                    0.1,
+                ]
+            },
         )
         fig.subplots_adjust(wspace=0.2)
 
@@ -27,19 +35,16 @@ if __name__ == '__main__':
 
         for i in range(N):
             sub_ds = ds.isel(exp=i)
-            #print(f'{i} / {N} : {sub_ds.exp.values}')
-            im = (
-                sub_ds.where(sub_ds.tmask_surf)
-                .F_b.cf.plot.contourf(
-                    levels=11,
-                    vmax=1.5,
-                    vmin=-1.5,
-                    cmap=cmo.balance,
-                    x="longitude",
-                    y="latitude",
-                    ax=ax[i],
-                    add_colorbar=False,
-                )
+            # print(f'{i} / {N} : {sub_ds.exp.values}')
+            im = sub_ds.where(sub_ds.tmask_surf).F_b.cf.plot.contourf(
+                levels=11,
+                vmax=1.5,
+                vmin=-1.5,
+                cmap=cmo.balance,
+                x="longitude",
+                y="latitude",
+                ax=ax[i],
+                add_colorbar=False,
             )
             sub_ds.where(sub_ds.tmask_surf).F_b.cf.plot.contour(
                 levels=np.linspace(-9, 9, 13),
@@ -81,7 +86,7 @@ if __name__ == '__main__':
                     linestyles="solid",
                 )
             name = sub_ds.short_name.values
-            ax[i].plot([0,40], [sub_ds.phi_max, sub_ds.phi_max], color='C3')
+            ax[i].plot([0, 40], [sub_ds.phi_max, sub_ds.phi_max], color="C3")
             ax[i].set_title(name)
             ax[i].set_xlabel("")
             ax[i].set_ylabel("")

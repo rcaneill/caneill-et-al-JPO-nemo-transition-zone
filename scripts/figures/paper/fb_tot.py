@@ -2,7 +2,7 @@ import xarray as xr
 from lib_position_transition_zone.figures.paper import *
 from lib_position_transition_zone.tools import time_mean
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with sns.axes_style("ticks"):
         ds = time_mean(xr.open_mfdataset(snakemake.input).isel(exp=0))
         fig, ax = plt.subplots(
@@ -69,4 +69,3 @@ if __name__ == '__main__':
         cb.set_label(r"Buoyancy flux [m$^2\,$s$^{-3}$]")
         fig.tight_layout()
         fig.savefig(snakemake.output[0])
-        

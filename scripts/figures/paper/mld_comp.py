@@ -7,17 +7,25 @@ The figure is made to look good for 5 experiences
 """
 
 
-if __name__ == '__main__':
-    ds = time_mean(xr.open_mfdataset(snakemake.input), month=False).max('month')
+if __name__ == "__main__":
+    ds = time_mean(xr.open_mfdataset(snakemake.input), month=False).max("month")
     N = len(ds.exp)
     with sns.axes_style("ticks"):
         fig, ax = plt.subplots(
             1,
-            N+1,
-            figsize=(pc39*N/5, 3.5),
+            N + 1,
+            figsize=(pc39 * N / 5, 3.5),
             sharex=False,
             sharey=False,
-            gridspec_kw={"width_ratios": [1,]*N + [0.1,]},
+            gridspec_kw={
+                "width_ratios": [
+                    1,
+                ]
+                * N
+                + [
+                    0.1,
+                ]
+            },
         )
         fig.subplots_adjust(wspace=0.2)
 
@@ -29,19 +37,17 @@ if __name__ == '__main__':
             mld = sub_ds.where(sub_ds.tmask_surf).mldr10_1
             # To render nice plots
             mld.load()
-            mld[{'x_c':0}] = mld[{'x_c':1}]
-            mld[{'x_c':-1}] = mld[{'x_c':-2}]
-            im = (
-                mld.cf.plot.contourf(
-                    levels=19,
-                    vmax=3600,
-                    vmin=0,
-                    cmap=cmo.deep,
-                    x="longitude",
-                    y="latitude",
-                    ax=ax[i],
-                    add_colorbar=False,
-                )
+            mld[{"x_c": 0}] = mld[{"x_c": 1}]
+            mld[{"x_c": -1}] = mld[{"x_c": -2}]
+            im = mld.cf.plot.contourf(
+                levels=19,
+                vmax=3600,
+                vmin=0,
+                cmap=cmo.deep,
+                x="longitude",
+                y="latitude",
+                ax=ax[i],
+                add_colorbar=False,
             )
             ims += [im]
             sci_ml = sub_ds.where(sub_ds.tmask_surf).sci_under_ml
@@ -66,7 +72,7 @@ if __name__ == '__main__':
                     linestyles="solid",
                 )
             name = sub_ds.short_name.values
-            ax[i].plot([0,40], [sub_ds.phi_max, sub_ds.phi_max], color='C3')
+            ax[i].plot([0, 40], [sub_ds.phi_max, sub_ds.phi_max], color="C3")
             ax[i].set_title(name)
             ax[i].set_xlabel("")
             ax[i].set_ylabel("")

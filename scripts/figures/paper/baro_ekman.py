@@ -2,14 +2,18 @@ import xarray as xr
 from lib_position_transition_zone.figures.paper import *
 from lib_position_transition_zone.tools import time_mean
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with sns.axes_style("ticks"):
         ds = time_mean(xr.open_mfdataset(snakemake.input).isel(exp=0))
-        
+
         fig, ax = plt.subplots(
-            1, 2, figsize=(pc33, 3.5), sharey=True, gridspec_kw={"width_ratios": [0.5, 1]}
+            1,
+            2,
+            figsize=(pc33, 3.5),
+            sharey=True,
+            gridspec_kw={"width_ratios": [0.5, 1]},
         )
-        
+
         axe = ax[1]
         cf = ds.psi_baro.cf.plot.contourf(
             x="longitude", y="latitude", levels=21, cmap=cmo.curl, ax=axe
@@ -20,7 +24,7 @@ if __name__ == '__main__':
         axe.set_ylabel("")
         axe.set_ylim(0, 60)
         axe.set_xlim(0, 40)
-        
+
         axe = ax[0]
         phi = ds.gphiv
         w_ek = ds.w_ek.where(ds.gphiv > 2)
@@ -40,6 +44,6 @@ if __name__ == '__main__':
         axe.set_title("a) Ekman vertical velocity")
         axe.set_ylabel(r"$\varphi$ [$^\circ$N]")
         axe.set_xlabel(r"Velocity [m$\,$s$^{-1}$]")
-        
+
         fig.tight_layout()
         fig.savefig(snakemake.output[0])

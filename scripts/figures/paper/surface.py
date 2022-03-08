@@ -3,10 +3,10 @@ from lib_position_transition_zone.figures.paper import *
 from lib_position_transition_zone.tools import time_mean
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with sns.axes_style("ticks"):
-        ds = time_mean(xr.open_mfdataset(snakemake.input['data']).isel(exp=0))
-        
+        ds = time_mean(xr.open_mfdataset(snakemake.input["data"]).isel(exp=0))
+
         fig, ax = plt.subplots(2, 3, figsize=(pc39, 6.1), sharey=True, sharex=False)
 
         T = ds.thetao.where(ds.tmask).isel({"z_c": 0})
@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
         # TEMPERATURE
         plot1 = T.cf.plot.contourf(
-            ax=ax[0,0],
+            ax=ax[0, 0],
             cmap=cmo.thermal,
             x="longitude",
             y="latitude",
@@ -24,7 +24,7 @@ if __name__ == '__main__':
         )
         plt.clabel(
             T.cf.plot.contour(
-                ax=ax[0,0],
+                ax=ax[0, 0],
                 x="longitude",
                 y="latitude",
                 colors="w",
@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
         # SALINITY
         plot2 = S.cf.plot.contourf(
-            ax=ax[0,1],
+            ax=ax[0, 1],
             cmap=cmo.haline,
             x="longitude",
             y="latitude",
@@ -48,7 +48,7 @@ if __name__ == '__main__':
         )
         plt.clabel(
             S.cf.plot.contour(
-                ax=ax[0,1],
+                ax=ax[0, 1],
                 x="longitude",
                 y="latitude",
                 colors="w",
@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
         # DENSITY
         plot3 = sigma0.cf.plot.contourf(
-            ax=ax[0,2],
+            ax=ax[0, 2],
             cmap=cmo.dense,
             x="longitude",
             y="latitude",
@@ -72,7 +72,7 @@ if __name__ == '__main__':
         )
         plt.clabel(
             sigma0.cf.plot.contour(
-                ax=ax[0,2],
+                ax=ax[0, 2],
                 x="longitude",
                 y="latitude",
                 colors="w",
@@ -82,25 +82,24 @@ if __name__ == '__main__':
             fontsize=10,
             fmt="%.1f",
         )
-        ax[0,2].plot([0,40], [ds.phi_max, ds.phi_max], color='C3')
-        
+        ax[0, 2].plot([0, 40], [ds.phi_max, ds.phi_max], color="C3")
 
         plot1.colorbar.set_label(r"$\Theta$ [$^\circ$C]")
         plot2.colorbar.set_label(r"$S_A$ [g$\,$kg$^{-1}$]")
         plot3.colorbar.set_label(r"$\sigma_0$ [kg$\,$m$^{-3}$]")
-        
-        
 
         ############ Lower plot #################
-        ds = time_mean(xr.open_mfdataset(snakemake.input['data']).isel(exp=0), month=False)
+        ds = time_mean(
+            xr.open_mfdataset(snakemake.input["data"]).isel(exp=0), month=False
+        )
         try:
-            mld = ds.mldr10_1.max('month')
+            mld = ds.mldr10_1.max("month")
         except ValueError:
             mld = ds.mldr10_1
         ds = time_mean(ds)
-        
+
         plot1 = mld.where(ds.tmask.isel(z_c=0)).cf.plot.contourf(
-            ax=ax[1,1],
+            ax=ax[1, 1],
             cmap=cmo.deep,
             x="longitude",
             y="latitude",
@@ -111,7 +110,7 @@ if __name__ == '__main__':
         )
 
         strat = ds.sci_under_ml.cf.plot.contourf(
-            ax=ax[1,2],
+            ax=ax[1, 2],
             cmap=cm_sci,
             x="longitude",
             y="latitude",
@@ -120,19 +119,19 @@ if __name__ == '__main__':
             vmax=2,
             levels=41,
         )
-        mld_levels = [1800,3600]
-        for axe, c in zip(ax[1,1:], ['w', 'k']):
+        mld_levels = [1800, 3600]
+        for axe, c in zip(ax[1, 1:], ["w", "k"]):
             mld.where(ds.tmask.isel(z_c=0)).cf.plot.contour(
                 ax=axe, colors=[c], x="longitude", y="latitude", levels=mld_levels
             )
         cb = plot1.colorbar
         ylim = cb.ax.get_ylim()
         for i in mld_levels:
-            cb.ax.plot([i,i], ylim, color='w')
-        
+            cb.ax.plot([i, i], ylim, color="w")
+
         plot2 = strat
         plot3 = np.abs(ds.sci_under_ml).cf.plot.contourf(
-            ax=ax[1,2],
+            ax=ax[1, 2],
             x="longitude",
             y="latitude",
             colors="none",
@@ -144,7 +143,9 @@ if __name__ == '__main__':
         for collection in plot3.collections:
             collection.set_edgecolor("w")
             collection.set_linewidth(2)
-        strat.colorbar.ax.vlines([-1, 1], -10, 10, colors="w", linestyle="-", linewidth=2)
+        strat.colorbar.ax.vlines(
+            [-1, 1], -10, 10, colors="w", linestyle="-", linewidth=2
+        )
         plot4 = strat.colorbar.ax.contourf(
             np.linspace(-1, 1, 10),
             np.linspace(-10, 10, 10),
@@ -158,39 +159,38 @@ if __name__ == '__main__':
             collection.set_linewidth(2)
 
         plot_ssh = ds.zos.cf.plot.contourf(
-            ax=ax[1,0],
+            ax=ax[1, 0],
             cmap=cmo.balance,
             x="longitude",
             y="latitude",
             cbar_kwargs=dict(orientation="horizontal"),
             levels=21,
         )
-        
-        for axe in ax[1]:
-            for lon in snakemake.params['lon_sections']:
-                axe.plot([lon,lon], [0,60], 'k-.')
 
+        for axe in ax[1]:
+            for lon in snakemake.params["lon_sections"]:
+                axe.plot([lon, lon], [0, 60], "k-.")
 
         for axe in ax.flatten():
             axe.set_ylabel("")
             axe.set_xlabel("")
             axe.set_ylim(0, 60)
             axe.set_xlim(0, 40)
-        ax[0,0].set_title("a) SST")
-        ax[0,1].set_title("b) SSS")
-        ax[0,2].set_title("c) $\sigma_0$")
-        ax[1,1].set_title("e) Mixed Layer Depth")
-        ax[1,2].set_title(f"f) SCI under the ML")
-        ax[1,0].set_title(f"d) SSH")
+        ax[0, 0].set_title("a) SST")
+        ax[0, 1].set_title("b) SSS")
+        ax[0, 2].set_title("c) $\sigma_0$")
+        ax[1, 1].set_title("e) Mixed Layer Depth")
+        ax[1, 2].set_title(f"f) SCI under the ML")
+        ax[1, 0].set_title(f"d) SSH")
 
-        for axe in ax[:,0]:
+        for axe in ax[:, 0]:
             axe.set_ylabel(r"$\varphi$ [$^\circ$N]")
-        
+
         for axe in ax.flatten():
             axe.set_xlabel(r"$\lambda$ [$^\circ$E]")
 
         plot1.colorbar.set_label(r"Depth [m]")
-        plot1.colorbar.set_ticks(np.arange(0,3600+1,600))
+        plot1.colorbar.set_ticks(np.arange(0, 3600 + 1, 600))
         plot2.colorbar.set_label("SCI")
         plot_ssh.colorbar.set_label("SSH [m]")
 

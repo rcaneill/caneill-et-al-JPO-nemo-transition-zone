@@ -10,18 +10,17 @@ xr.set_options(keep_attrs=True)
 
 def sci_under_ml(ds):
     return ds.sci_under_ml_at_every_time.where(
-        (ds.mldr10_1 == ds.mldr10_1.max('month'))
-        &
-        (ds.mldr10_1.max('month')<ds.gdepw_0.isel(z_f=-2))
-    ).mean('month')
-    
-    
+        (ds.mldr10_1 == ds.mldr10_1.max("month"))
+        & (ds.mldr10_1.max("month") < ds.gdepw_0.isel(z_f=-2))
+    ).mean("month")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ds, grid, old_vars = io.open_all(snakemake.input)
 
-    ds['sci'] = stratification.compute_strati_ratio(ds.thetao, ds.so, grid.interp(ds.alpha, 'Z'), grid.interp(ds.beta, 'Z'), grid)
+    ds["sci"] = stratification.compute_strati_ratio(
+        ds.thetao, ds.so, grid.interp(ds.alpha, "Z"), grid.interp(ds.beta, "Z"), grid
+    )
 
     # SCI under the ML
     """
@@ -47,31 +46,49 @@ if __name__ == '__main__':
         rn_mu2=ds.get("rn_mu2", default=rn_mu2),
         rn_nu=ds.get("rn_nu", default=rn_nu),
     )
-    ds['phi_dep_mld_t'] = ds.gdept_0 - ds.mldr10_1
+    ds["phi_dep_mld_t"] = ds.gdept_0 - ds.mldr10_1
     target = np.array([10, 30])
 
-    T = grid.transform(ds.thetao, 'Z', target=target, target_data=ds.phi_dep_mld_t, method='linear')
-    S = grid.transform(ds.so, 'Z', target=target, target_data=ds.phi_dep_mld_t, method='linear')
-    alpha = eos.compute_alpha(T.mean('phi_dep_mld_t'), S.mean('phi_dep_mld_t'), 0, **nameos)
-    beta = eos.compute_beta(T.mean('phi_dep_mld_t'), S.mean('phi_dep_mld_t'), 0, **nameos)
-    
+    T = grid.transform(
+        ds.thetao, "Z", target=target, target_data=ds.phi_dep_mld_t, method="linear"
+    )
+    S = grid.transform(
+        ds.so, "Z", target=target, target_data=ds.phi_dep_mld_t, method="linear"
+    )
+    alpha = eos.compute_alpha(
+        T.mean("phi_dep_mld_t"), S.mean("phi_dep_mld_t"), 0, **nameos
+    )
+    beta = eos.compute_beta(
+        T.mean("phi_dep_mld_t"), S.mean("phi_dep_mld_t"), 0, **nameos
+    )
+
     g = 9.81
-    N2_T = g * alpha * T.diff('phi_dep_mld_t').squeeze('phi_dep_mld_t') / (target[1] - target[0])
-    N2_S = - g * beta * S.diff('phi_dep_mld_t').squeeze('phi_dep_mld_t') / (target[1] - target[0])
-    
+    N2_T = (
+        g
+        * alpha
+        * T.diff("phi_dep_mld_t").squeeze("phi_dep_mld_t")
+        / (target[1] - target[0])
+    )
+    N2_S = (
+        -g
+        * beta
+        * S.diff("phi_dep_mld_t").squeeze("phi_dep_mld_t")
+        / (target[1] - target[0])
+    )
+
     N2 = N2_T + N2_S
     SCI = (N2_T - N2_S) / N2
 
-    ds['sci_under_ml_at_every_time'] = SCI.drop_vars('phi_dep_mld_t')
+    ds["sci_under_ml_at_every_time"] = SCI.drop_vars("phi_dep_mld_t")
 
     # Now if we have monthly data we can compute the sci_under_ml at
     # the time of deepest ML over the year
 
-    if ds.delta_t.values[0] == '1m':
-        ds['sci_under_ml'] = sci_under_ml(ds)
-    elif ds.delta_t.values[0] == '1y':
-        ds['sci_under_ml'] = ds['sci_under_ml_at_every_time']
-    
-    ds = ds.drop_vars(['phi_dep_mld_w', 'phi_dep_mld_t'], errors='ignore')
+    if ds.delta_t.values[0] == "1m":
+        ds["sci_under_ml"] = sci_under_ml(ds)
+    elif ds.delta_t.values[0] == "1y":
+        ds["sci_under_ml"] = ds["sci_under_ml_at_every_time"]
 
-    ds.drop_vars(old_vars, errors='ignore').to_netcdf(snakemake.output[0])
+    ds = ds.drop_vars(["phi_dep_mld_w", "phi_dep_mld_t"], errors="ignore")
+
+    ds.drop_vars(old_vars, errors="ignore").to_netcdf(snakemake.output[0])
