@@ -4,12 +4,12 @@ from pathlib import Path
 
 
 DATA = Path("data")
-RAW = DATA / 'raw'
-PROCESSED = DATA / 'processed'
-ALL_EXP = [i for i in listdir(RAW) if (RAW/i).is_dir()]
-FIGURES = Path('figures')
-FIGURES_PAPER = FIGURES / 'paper'
-CONFIGURATION = Path('configuration')
+RAW = DATA / "raw"
+PROCESSED = DATA / "processed"
+ALL_EXP = [i for i in listdir(RAW) if (RAW / i).is_dir()]
+FIGURES = Path("figures")
+FIGURES_PAPER = FIGURES / "paper"
+CONFIGURATION = Path("configuration")
 
 # Organization of the folders
 """ For each experiment in data/raw
@@ -51,22 +51,23 @@ exp_configs = []
 exp_configs_dict = {}
 
 for exp in ALL_EXP:
-    configs = [i for i in listdir(RAW / exp / 'Experiments') if 'EXP_' in i]
+    configs = [i for i in listdir(RAW / exp / "Experiments") if "EXP_" in i]
     exp_configs_dict[exp] = configs
     for config in configs:
-        exp_configs.append(f'{exp}/{config}')
+        exp_configs.append(f"{exp}/{config}")
 
 
-SECTION_PARAM_LON = CONFIGURATION / 'section_longitudes.txt'
+SECTION_PARAM_LON = CONFIGURATION / "section_longitudes.txt"
 with open(SECTION_PARAM_LON) as f:
     lon_sections = [float(i) for i in f.read().splitlines()]
-SECTION_PARAM_TIME = CONFIGURATION / 'section_times.txt'
+SECTION_PARAM_TIME = CONFIGURATION / "section_times.txt"
 with open(SECTION_PARAM_TIME) as f:
     month_sections = [int(i) for i in f.read().splitlines()]
 
 ##############################
 # RULES                      #
 ##############################
+
 
 include: "rules/process.skm"
 include: "rules/diags.skm"

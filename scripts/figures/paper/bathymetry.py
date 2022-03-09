@@ -3,21 +3,23 @@ from lib_position_transition_zone.figures.paper import *
 
 sns.axes_style("ticks")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ds = xr.open_mfdataset(snakemake.input)
 
-    ds.coords["lon_mercatoru"] = (
-        np.cos(np.deg2rad(ds.gphit)) * (ds.glamu - 20) + 20
-    )
-    ds.coords["lon_mercatort"] = (
-        np.cos(np.deg2rad(ds.gphit)) * (ds.glamt - 20) + 20
-    )
+    ds.coords["lon_mercatoru"] = np.cos(np.deg2rad(ds.gphit)) * (ds.glamu - 20) + 20
+    ds.coords["lon_mercatort"] = np.cos(np.deg2rad(ds.gphit)) * (ds.glamt - 20) + 20
 
     fig, axe = plt.subplots(1, 1, figsize=(pc19, 3))
 
     p = ds.gdepw_0.isel({"z_f": -1}).cf.plot.contourf(
-        x="lon_mercatort", y="latitude", levels=11, cmap=cmo.deep_r, ax=axe,
-        vmin=2000, vmax=4000, extend='neither'
+        x="lon_mercatort",
+        y="latitude",
+        levels=11,
+        cmap=cmo.deep_r,
+        ax=axe,
+        vmin=2000,
+        vmax=4000,
+        extend="neither",
     )
     p.colorbar.set_label("Depth [m]")
 
@@ -27,9 +29,7 @@ if __name__ == '__main__':
         for i in axe.get_yticks():
             axe.plot([0, 40], [i, i], "silver")
         # We hide the horizontal lines out of the plot
-        axe.fill_betweenx(
-            ds.gphit, ds.lon_mercatoru.isel(x_f=0), color="w", zorder=2.1
-        )
+        axe.fill_betweenx(ds.gphit, ds.lon_mercatoru.isel(x_f=0), color="w", zorder=2.1)
         axe.fill_betweenx(
             ds.gphit, ds.lon_mercatoru.isel(x_f=40), 50, color="w", zorder=2.1
         )

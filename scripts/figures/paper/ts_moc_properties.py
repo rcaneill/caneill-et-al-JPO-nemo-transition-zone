@@ -2,7 +2,7 @@ import xarray as xr
 from lib_position_transition_zone.figures.paper import *
 from lib_position_transition_zone.tools import time_mean
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ds = time_mean(xr.open_mfdataset(snakemake.input))
 
     fig, ax = plt.subplots(3, 1, sharex=True, figsize=(pc19, 5))
@@ -10,7 +10,11 @@ if __name__ == '__main__':
     ax[1].grid(True)
 
     ds.plot.scatter(
-        "lat_buoyancy_front", "mean_T", ax=ax[0], label=r"$\overline{\Theta}$", marker="v"
+        "lat_buoyancy_front",
+        "mean_T",
+        ax=ax[0],
+        label=r"$\overline{\Theta}$",
+        marker="v",
     )
     ds.plot.scatter(
         "lat_buoyancy_front", "abyss_T", ax=ax[0], label=r"$\Theta$ abyssal", marker="o"
@@ -40,6 +44,6 @@ if __name__ == '__main__':
     ax[0].set_xlabel("")
     ax[1].set_xlabel("")
     ax[2].set_xlabel(r"Latitude of the buoyancy inversion [$^\circ$N]")
-    
+
     fig.tight_layout()
     fig.savefig(snakemake.output[0])

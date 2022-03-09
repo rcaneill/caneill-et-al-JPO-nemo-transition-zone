@@ -4,61 +4,71 @@ Creating all plots from all experiments / configs
 
 # All config plot
 
+
 rule plot_config_paper_all:
     input:
-        [(FIGURES / f"{{exp}}/{{config}}/{fig}.pdf") for fig in config_paper_all_figs]
+        [(FIGURES / f"{{exp}}/{{config}}/{fig}.pdf") for fig in config_paper_all_figs],
     output:
-        touch(FIGURES / "{exp}/{config}/plot_config_paper_all.done")
-        
+        touch(FIGURES / "{exp}/{config}/plot_config_paper_all.done"),
+
+
 rule plot_config_paper_all_configs:
     input:
-        lambda wildcards: [(FIGURES / f"{{exp}}/{config}/plot_config_paper_all.done") for config in exp_configs_dict[wildcards.exp]]
+        lambda wildcards: [
+            (FIGURES / f"{{exp}}/{config}/plot_config_paper_all.done")
+            for config in exp_configs_dict[wildcards.exp]
+        ],
     output:
-        touch(FIGURES / "{exp}/plot_config_paper_all.done")
+        touch(FIGURES / "{exp}/plot_config_paper_all.done"),
+
 
 rule plot_config_paper_all_configs_all_exps:
     input:
-        [(FIGURES / f"{exp}/plot_config_paper_all.done") for exp in ALL_EXP]
+        [(FIGURES / f"{exp}/plot_config_paper_all.done") for exp in ALL_EXP],
     output:
-        touch(FIGURES / "plot_config_paper_all.done")
+        touch(FIGURES / "plot_config_paper_all.done"),
 
-        
+
 # All plots per experiment
-
 
 
 rule plot_exp_paper:
     input:
-        [(FIGURES / f"{{exp}}/{fig}.pdf") for fig in exp_paper_all_figs]
+        [(FIGURES / f"{{exp}}/{fig}.pdf") for fig in exp_paper_all_figs],
     output:
-        touch(FIGURES / "{exp}/plot_exp_paper_all.done")
-        
+        touch(FIGURES / "{exp}/plot_exp_paper_all.done"),
+
+
 rule plot_exp_supplementary:
     input:
-        [(FIGURES / f"{{exp}}/{fig}.pdf") for fig in exp_supplementary_all_figs]
+        [(FIGURES / f"{{exp}}/{fig}.pdf") for fig in exp_supplementary_all_figs],
     output:
-        touch(FIGURES / "{exp}/plot_exp_supplementary_all.done")
+        touch(FIGURES / "{exp}/plot_exp_supplementary_all.done"),
 
 
 rule plot_exp_paper_all_exps:
     input:
-        [(FIGURES / f"{exp}/plot_exp_paper_all.done") for exp in ALL_EXP]
+        [(FIGURES / f"{exp}/plot_exp_paper_all.done") for exp in ALL_EXP],
     output:
-        touch(FIGURES / "plot_exp_paper_all_exps.done")
+        touch(FIGURES / "plot_exp_paper_all_exps.done"),
 
 
 rule plot_exp_supplementary_all_exps:
     input:
-        [(FIGURES / f"{exp}/plot_exp_supplementary_all.done") for exp in ALL_EXP]
+        [(FIGURES / f"{exp}/plot_exp_supplementary_all.done") for exp in ALL_EXP],
     output:
-        touch(FIGURES / "plot_exp_supplementary_all_exps.done")
+        touch(FIGURES / "plot_exp_supplementary_all_exps.done"),
+
 
 # All possible plots
 
+
 rule plot_all:
     input:
-        [FIGURES / "plot_exp_paper_all_exps.done",
-         FIGURES / "plot_config_paper_all.done",
-         FIGURES / "plot_exp_supplementary_all_exps.done"]
+        [
+            FIGURES / "plot_exp_paper_all_exps.done",
+            FIGURES / "plot_config_paper_all.done",
+            FIGURES / "plot_exp_supplementary_all_exps.done",
+        ],
     output:
-        touch(FIGURES / "plot_all.done")
+        touch(FIGURES / "plot_all.done"),

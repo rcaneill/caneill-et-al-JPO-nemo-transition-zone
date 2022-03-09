@@ -2,7 +2,7 @@ import xarray as xr
 from lib_position_transition_zone.figures.paper import *
 from lib_position_transition_zone.tools import time_mean
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ds = time_mean(xr.open_mfdataset(snakemake.input))
 
     fig, axe = plt.subplots(1, 1, figsize=(pc19, 3))
@@ -12,6 +12,6 @@ if __name__ == '__main__':
     axe.set_title("")
 
     axe.ticklabel_format(axis="x", style="sci", scilimits=(-2, 2))
-    
+
     fig.tight_layout()
     fig.savefig(snakemake.output[0])

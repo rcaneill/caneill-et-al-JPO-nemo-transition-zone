@@ -2,10 +2,10 @@ import xarray as xr
 from lib_position_transition_zone.figures.paper import *
 from lib_position_transition_zone.tools import time_mean
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with sns.axes_style("ticks"):
         ds = time_mean(xr.open_mfdataset(snakemake.input).isel(exp=0))
-        
+
         fig, ax = plt.subplots(1, 3, figsize=(pc39, 5), sharey=True, sharex=True)
 
         T = ds.thetao.where(ds.tmask).isel({"z_c": 0})
@@ -81,7 +81,7 @@ if __name__ == '__main__':
             fontsize=10,
             fmt="%.1f",
         )
-        ax[2].plot([0,40], [ds.phi_max, ds.phi_max], color='C3')
+        ax[2].plot([0, 40], [ds.phi_max, ds.phi_max], color="C3")
 
         ax[0].set_ylim(0, 60)
         ax[0].set_xlim(0, 40)
@@ -101,4 +101,3 @@ if __name__ == '__main__':
 
         fig.tight_layout()
         fig.savefig(snakemake.output[0])
-        
