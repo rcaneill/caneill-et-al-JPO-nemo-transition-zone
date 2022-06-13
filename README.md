@@ -1,8 +1,8 @@
 # The polar transition from alpha to beta regions set by a surface buoyancy flux inversion.
 *Authors: Romain Caneill, Fabien Roquet, Gurvan Madec, Jonas Nycander
 
-Sources for the paper [add ref], submitted to Journal of Physical Oceanography.
-The content may change during the review process.
+Sources for the paper `Caneill, R., Roquet, F., Madec, G., and Nycander, J. (2022). The polar transition from alpha to beta regions
+set by a surface buoyancy flux inversion.`, published by the Journal of Physical Oceanography.
 
 This repository along with the zenodo data zip can be used to reproduce all the analyzes of the study.
 All the study, from the model runs to their output analyze, is entirely reproducible from a few commands.
