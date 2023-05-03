@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DATA=data2
+DATA=data
 RAW=${DATA}/raw
 TMP=${DATA}/tmp
 
