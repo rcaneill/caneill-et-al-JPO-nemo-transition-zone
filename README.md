@@ -80,6 +80,9 @@ pipenv install
 You first need to download the raw data from zenodo, and unzip the content into the folder `data/raw`.
 These data are the output files of all the NEMO runs used in this study.
 
+You need to have zip and unzip installed (e.g. on a debian like linux
+`sudo apt install zip unzip`).
+
 You can use the `download_and_extract_data_from_zenodo.sh` script:
 ```
 pipenv install
