@@ -21,6 +21,7 @@ xbasin = "0.0.5"
 seaborn = "*"
 cf-xarray = "*"
 lib-position-transition-zone = {editable = true, path = "."}
+zenodo-get = "*"
 
 [requires]
 python_version = "3.8"
