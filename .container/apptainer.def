@@ -1,0 +1,19 @@
+BootStrap: docker
+From: python:3.8.18-bullseye
+
+%files
+    Pipfile.lock /virtual_env/Pipfile.lock
+    Pipfile /virtual_env/Pipfile
+    setup.py /virtual_env/setup.py
+    lib_position_transition_zone /virtual_env/lib_position_transition_zone
+
+%post
+    apt -y update
+    apt -y upgrade
+    apt -y install zip unzip texlive
+    pip install pipenv==2023.11.14
+    cd /virtual_env
+    mkdir .venv
+    pipenv install
+    echo "source /virtual_env/.venv/bin/activate" >> $APPTAINER_ENVIRONMENT
+

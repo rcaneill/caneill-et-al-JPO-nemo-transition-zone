@@ -73,7 +73,15 @@ pip3 install --user pipenv
 And then (in the base directory):
 ```
 pipenv install
+pipenv shell # launches a shell inside the environment
 ```
+
+### (Alternative to the virtual environment) Install and use the container
+
+We use apptainer as container manager. Please [install apptainer](https://apptainer.org/docs/admin/latest/installation.html).
+
+
+
 
 ### Download the raw data from zenodo
 
@@ -85,7 +93,6 @@ You need to have zip and unzip installed (e.g. on a debian like linux
 
 You can use the `download_and_extract_data_from_zenodo.sh` script:
 ```
-pipenv install
 ./download_and_extract_data_from_zenodo.sh
 ```
 
