@@ -1,5 +1,4 @@
 data/*
-figures/*
 *~
 \#*\#
 *.egg-info
@@ -8,3 +7,4 @@ pyproject.toml
 .snakemake
 !figures/paper_DAG
 !figures/paper_RULEGRAPH
+container*
