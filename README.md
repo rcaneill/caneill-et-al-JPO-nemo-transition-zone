@@ -80,8 +80,27 @@ pipenv shell # launches a shell inside the environment
 
 We use apptainer as container manager. Please [install apptainer](https://apptainer.org/docs/admin/latest/installation.html).
 
+#### Option 1: build container
 
+```
+apptainer build container.sif .container/apptainer.def
+# And then open a shell in the container
+apptainer shell container.sif
+```
 
+#### Option 2: use the provided container
+
+Be careful, use this method only if you trust me (Romain Caneill). I signed the container
+with my open GPG key.
+
+```
+# Download the containter from the github release
+
+# Verify the container
+apptainer verify container.sif
+# open a shell in the container
+apptainer shell container.sif
+```
 
 ### Download the raw data from zenodo
 
@@ -89,7 +108,7 @@ You first need to download the raw data from zenodo, and unzip the content into 
 These data are the output files of all the NEMO runs used in this study.
 
 You need to have zip and unzip installed (e.g. on a debian like linux
-`sudo apt install zip unzip`).
+`sudo apt install zip unzip`, not needed if you use the container).
 
 You can use the `download_and_extract_data_from_zenodo.sh` script:
 ```
@@ -101,27 +120,29 @@ You can use the `download_and_extract_data_from_zenodo.sh` script:
 As mentionned, the analyzes are organized by the use of snakemake.
 One can think of it as a python friendly GNU make equivalent.
 
+All the next steps are assuming either that you are in the pipenv shell, or the apptainer shell.
+
 A first good step is to reproduce the figures used in the paper:
 ```
-pipenv run snakemake --cores 8 paper_all_fig
+snakemake --cores 8 paper_all_fig
 ```
 You can adapt the number of cores depending on you computer.
 With 8 cores in a modern laptop this takes few minutes to run.
 
 It is then possible to generate other figures, like e.g. the MOC in another configuration:
 ```
-pipenv run snakemake --cores 8 figures/EXP_main/EXP_rn_lambda1_0.06_rn_a0_0.145/moc.pdf
+snakemake --cores 8 figures/EXP_main/EXP_rn_lambda1_0.06_rn_a0_0.145/moc.pdf
 ```
 
 To generate all the figures at once (about 5 minutes to run for one experiment):
 ```
-pipenv run snakemake --cores 8 figures/plot_all.done
+snakemake --cores 8 figures/plot_all.done
 ```
 
 You can also generate the figures giving the figure number
 from the paper, e.g.:
 ```
-pipenv run snakemake --cores 8 figures/paper_by_number/figure_1.pdf
+snakemake --cores 8 figures/paper_by_number/figure_1.pdf
 ```
 
 The rules are described in the files located in rules/, and each rule uses a python script located in scripts/.
