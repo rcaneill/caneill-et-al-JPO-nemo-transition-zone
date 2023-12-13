@@ -95,7 +95,7 @@ with my open GPG key.
 
 ```
 # Download the containter from the github release
-
+wget https://github.com/rcaneill/caneill-et-al-JPO-nemo-transition-zone/releases/download/v1.0/container.sif
 # Verify the container
 apptainer verify container.sif
 # open a shell in the container
