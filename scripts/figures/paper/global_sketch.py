@@ -322,7 +322,7 @@ if __name__ == "__main__":
         textcoords="data",
         arrowprops=dict(facecolor="w", edgecolor="k", shrinkB=5, width=2),
     )
-    ax[1].text(40.8, 210, "Surface advection", color="w", size="xx-large")
+    ax[1].text(40.8, 235, "Surface advection", color="w", size="xx-large")
 
     fig.tight_layout()
     fig.subplots_adjust(hspace=0.0)
