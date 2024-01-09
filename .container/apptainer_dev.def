@@ -1,0 +1,9 @@
+BootStrap: docker
+From: python:3.8.18-bullseye
+
+%post
+    apt -y update
+    apt -y upgrade
+    apt -y install zip unzip texlive
+    pip install pipenv==2023.11.14
+    mkdir /data
