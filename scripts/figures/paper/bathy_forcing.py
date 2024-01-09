@@ -20,10 +20,10 @@ if __name__ == "__main__":
     ##############  Bathymetry ###################
     gs = axes[0, 0].get_gridspec()
     # remove the underlying axes
-    for ax in axes[:-1, 0]:
+    for ax in axes[:-2, 0]:
         ax.remove()
-    axbig = fig.add_subplot(gs[:-1, 0], sharex=axes[-1, 0])
-    ax = [axbig, axes[-1, 0]]
+    axbig = fig.add_subplot(gs[:-2, 0], sharex=axes[-1, 0])
+    ax = [axbig, axes[-2, 0]]
     bathy = ds.gdepw_0.isel({"z_f": -1}) / 1000
 
     hmax = ds.rn_h.values[0] / 1000
@@ -38,9 +38,10 @@ if __name__ == "__main__":
         vmin=hmin,
         vmax=hmax,
         extend="neither",
-        cbar_kwargs={"location": "bottom"},  # add_colorbar=False,
+        cbar_kwargs={"location": "bottom", "ticks":[2,3,4]},  # add_colorbar=False,
     )
-    p.colorbar.set_label("Depth [m]")
+    p.colorbar.set_label("Depth [km]")
+    ax[0].set_yticks([0,20,40,60])
 
     # We only add the lines for the 1 degree case
     if ds.rn_e1_deg.values == 1.0:
@@ -78,10 +79,10 @@ if __name__ == "__main__":
         axe.set_xticks(np.arange(0, 41, 10))
     ax[1].set_xlabel(r"$\lambda$ [$^\circ$E]")
     ax[0].set_ylabel(r"$\varphi$ [$^\circ$N]")
-    ax[1].set_ylabel("Depth [km]")
+    ax[1].set_ylabel("")
 
     ax[0].set_title("a) Bathymetry map")
-    ax[1].set_title("b) Section at $30^\circ$N")
+    ax[1].set_title("")
 
     # cb = fig.colorbar(p, ax=ax)
     # cb.set_label("Depth [km]")
@@ -115,10 +116,10 @@ if __name__ == "__main__":
     for axe, a in zip(
         ax.flatten(),
         [
-            r"c) $T^*$",
+            r"c) $\Theta^*$",
             r"d) $S^*$",
             r"e) $\tau_i$",
-            r"f) $Q_{solar}$",
+            r"",
             r"g) $\sigma_0^*$",
         ],
     ):
@@ -147,5 +148,5 @@ if __name__ == "__main__":
 
     ax[-1].set_xlabel(r"$\varphi$ [$^\circ$N]")
 
-    fig.tight_layout()
+    fig.tight_layout(h_pad=.1, w_pad=2)
     fig.savefig(snakemake.output[0])

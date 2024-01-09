@@ -27,8 +27,8 @@ plt.rc("figure", titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
 tex_fonts = {
     # Use LaTeX to write all text
-    "text.usetex": True,
-    "font.family": "serif",
+    "text.usetex": False,
+    "font.family": "sans-serif",
 }
 
 plt.rcParams.update(tex_fonts)

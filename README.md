@@ -102,6 +102,20 @@ apptainer verify container.sif
 apptainer shell container.sif
 ```
 
+
+### (Other option) Install the dev container
+
+This allows you to edit the library `lib_position_transition_zone`
+
+```
+apptainer build --sandbox container_dev .container/apptainer_dev.def
+# And then open a shell in the container
+apptainer shell --pwd /data --bind .:/data --writable --no-home container_dev
+pipenv install
+pipenv shell
+```
+
+
 ### Download the raw data from zenodo
 
 You first need to download the raw data from zenodo, and unzip the content into the folder `data/raw`.

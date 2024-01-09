@@ -229,7 +229,7 @@ if __name__ == "__main__":
     # mld
     mld = mld_func(x)
     ax[1].plot(x, mld, color="k")
-    ax[1].text(28, 130, "MLD", size="large", color="k")
+    ax[1].text(28, 140, "MLD", size="x-large", color="k")
     # isotherms
     isotherm = isotherms_func(mld, x)
     ax[1].plot(x, isotherm.T, linestyle="solid", color="silver", linewidth=1)
@@ -246,7 +246,7 @@ if __name__ == "__main__":
     # xticks
     ax[1].set_xticks([23, 56], minor=True)
     # ax[1].set_xticklabels([u'20$^\circ$N',u'60$^\circ$N'], minor=True)
-    ax[1].set_xticklabels(["tropics", "subpolar region"], minor=True)
+    ax[1].set_xticklabels(["subtropics", "(sub)polar region"], minor=True)
     # remove extra ticks
     remove_ticks(ax[1])
 
@@ -257,9 +257,9 @@ if __name__ == "__main__":
     ax[1].text(52, 1000, "Transition", size="xx-large", bbox=bbox_props)
 
     # text buoyancy fluxes
-    ax[0].text(60, f_b_salt[-1], "$F_b^S$", size="x-large", color="C0")
-    ax[0].text(60, f_b_theta[-1] - 0.2, "$F_b^\Theta$", size="x-large", color="C1")
-    ax[0].text(40, -1.3, "$F_b$", size="x-large", color="C2")
+    ax[0].text(60, f_b_salt[-1], "$\mathcal{B}^S$", size="xx-large", color="C0")
+    ax[0].text(60, f_b_theta[-1] - 0.2, "$\mathcal{B}^\Theta$", size="xx-large", color="C1")
+    ax[0].text(40, -1.3, "$\mathcal{B}$", size="xx-large", color="C2")
 
     # Arrow buoyancy fluxes
     ax[2].axis("off")
@@ -279,7 +279,7 @@ if __name__ == "__main__":
     ):
         curly_arrow(x, up=up, n=3, axe=ax[2], col="C2")
     for (x, i) in zip([(20 + x1) / 2, (x1 + x2) / 2, (x2 + 60) / 2], "><>"):
-        ax[2].text(x, 0.2, f"$F_b{i}0$", ha="center")
+        ax[2].text(x, 0.2, f"$\mathcal{{B}}{i}0$", ha="center", size='xx-large')
 
     # Upper plot background
     xlim = ax[0].get_xlim()
@@ -294,7 +294,7 @@ if __name__ == "__main__":
     # ax[0].text(21, .5, 'buoyancy gain', size="large", color='k')
 
     # Upper plot phi_b
-    ax[2].text(x2 - 0.5, 0.8, r"$\varphi_b$", size="large")
+    #ax[2].text(x2 - 0.5, 0.8, r"$\varphi_b$", size="large")
 
     # Intermediate water creation
     ax[1].annotate(
@@ -311,7 +311,7 @@ if __name__ == "__main__":
             width=4,
         ),
     )
-    ax[1].text(39, 1200, "Intermediate water", color="w", size="xx-large")
+    ax[1].text(38, 1200, "Intermediate water", color="w", size="xx-large")
 
     # Surface adv
     ax[1].annotate(
@@ -322,7 +322,7 @@ if __name__ == "__main__":
         textcoords="data",
         arrowprops=dict(facecolor="w", edgecolor="k", shrinkB=5, width=2),
     )
-    ax[1].text(41.8, 200, "Surface advection", color="w", size="x-large")
+    ax[1].text(40.8, 210, "Surface advection", color="w", size="xx-large")
 
     fig.tight_layout()
     fig.subplots_adjust(hspace=0.0)
